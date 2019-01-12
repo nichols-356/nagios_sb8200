@@ -31,6 +31,10 @@ OK: DOCSIS Network Access Enabled Allowed | d_23_pow=2.9 d_23_snr=41.2 d_23_corr
 The ugly bits after the `|` are due to the [Nagios performance data formatting](https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/3/en/perfdata.html).
 
 Why ~20 seconds? It depends on your ISP, their configuration, and the firmware loaded on your modem. Try loading up your SB8200's statistics page in any normal web browser. You may notice that it loads quickly up to a certain point, then there is a long delay while the browser waits for more data. In my experience, this has been ~20 seconds before the entire page is loaded. It is only after the entire page is loaded that the script can continue past the `url=` line and begin to parse the data.
+## Graphs
+Here is an example of the graphs I have set up with this data. I am using [Icinga2](https://github.com/icinga/icinga2) to run the check every 2 minutes. Icinga2 sends its performance data to [Graphite](https://github.com/graphite-project/graphite-web). Lastly, [Grafana](https://github.com/grafana/grafana) is used as the front-end to query the Graphite database and display results.
+![Grafana example](https://github.com/nichols-356/nagios_sb8200/raw/master/graphs.png "An example Grafana dashboard.")
+
 ## Todo
 + Treat corrected and uncorrectables as counters -- only display what has changed since last poll (I'm currently taking care of this via graphite, utilizing the nonNegativeDerivative function).
  `alias(sumSeriesWithWildcards(nonNegativeDerivative(summarize(icinga2.Surfboard.services.stats.surfboard.perfdata.d_*_uncorr.value, '3m', 'avg', false)), 6), 'Uncorrectable')`
