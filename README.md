@@ -35,11 +35,16 @@ Why ~20 seconds? It depends on your ISP, their configuration, and the firmware l
 Here is an example of the graphs I have set up with this data. I am using [Icinga2](https://github.com/icinga/icinga2) to run the check every 2 minutes. Icinga2 sends its performance data to [Graphite](https://github.com/graphite-project/graphite-web). Lastly, [Grafana](https://github.com/grafana/grafana) is used as the front-end to query the Graphite database and display results.
 ![Grafana example](https://github.com/nichols-356/nagios_sb8200/raw/master/graphs.png "An example Grafana dashboard.")
 
-## Todo
+## Todo / Ideas
 + Treat corrected and uncorrectables as counters -- only display what has changed since last poll (I'm currently taking care of this via graphite, utilizing the nonNegativeDerivative function).
  `alias(sumSeriesWithWildcards(nonNegativeDerivative(summarize(icinga2.Surfboard.services.stats.surfboard.perfdata.d_*_uncorr.value, '3m', 'avg', false)), 6), 'Uncorrectable')`
-+ Commenting in the code to allow others to make some sense of it.
++ Commenting in the code to allow others to make better sense of it.
 + Less hard-coded array selections.
 + Command flags for enabling/disabling different options.
++ Add Uptime metric (should be simple, cmswinfo.html page loads in <100ms)
++ Store startup procedure statuses in variables for modularity.
++ Option for DOWN/UP channel counts in Service ouput (the part before the `|`)
++ Store Modulation mode in variables.
++ Support for other Motorola/Arris cable modems? Assuming they use the same table structure, it wouldn't be too difficult to implement.
 ## Contributing
 Feel free to contribute. Any improvements you make to this is much appreciated.
