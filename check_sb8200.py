@@ -4,7 +4,11 @@ from bs4 import BeautifulSoup
 import urllib2
 
 url = 'http://192.168.100.1/cmconnectionstatus.html'
-html = urllib2.urlopen(url).read()
+try:
+        html = urllib2.urlopen(url).read()
+except:
+        print "WARNING: Unable to read from URL"
+        exit(1)
 soup = BeautifulSoup(html)
 table = soup.find_all('table')
 
