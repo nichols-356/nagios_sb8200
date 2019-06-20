@@ -5,7 +5,6 @@ import urllib2
 import sys
 
 influx = 'influx' in sys.argv
-#influx = True
 url = 'http://192.168.100.1/cmconnectionstatus.html'
 try:
         html = urllib2.urlopen(url).read()
