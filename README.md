@@ -34,6 +34,7 @@ Why ~20 seconds? It depends on your ISP, their configuration, and the firmware l
 ## Graphs
 Here is an example of the graphs I have set up with this data. I am using [Icinga2](https://github.com/icinga/icinga2) to run the check every 2 minutes. Icinga2 sends its performance data to [Graphite](https://github.com/graphite-project/graphite-web). Lastly, [Grafana](https://github.com/grafana/grafana) is used as the front-end to query the Graphite database and display results.
 ![Grafana example](https://github.com/nichols-356/nagios_sb8200/raw/master/graphs.png "An example Grafana dashboard.")
+If you would like to start with a dashboard template of mine, [I have uploaded it to grafana.net](https://grafana.com/grafana/dashboards/10577) under the template ID `10577`.
 
 ## Todo / Ideas
 + Treat corrected and uncorrectables as counters -- only display what has changed since last poll (I'm currently taking care of this via graphite, utilizing the nonNegativeDerivative function).
