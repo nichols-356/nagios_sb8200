@@ -2,7 +2,9 @@
 
 from bs4 import BeautifulSoup
 import urllib2
+import sys
 
+influx = 'influx' in sys.argv
 url = 'http://192.168.100.1/cmconnectionstatus.html'
 try:
         html = urllib2.urlopen(url).read()
@@ -51,11 +53,12 @@ for i in range(len(startDetail)):
         else:
                 status = "CRITICAL:"
                 break
-print status, startProc, startStat,
+if not influx:
+	print status, startProc, startStat,
+	print "|",
 
 # Perfdata
 
-print "|",
 for i in range(len(downChannel)):
         dChData = downChannel[i].find_all('td')
         dChNum = dChData[0].string
@@ -63,17 +66,26 @@ for i in range(len(downChannel)):
         dChSNR = dChData[5].string.split()
         dChCorr = dChData[6].string
         dChUncorr = dChData[7].string
-        print "d_" + dChNum + "_pow=" + dChPow[0],
-        print "d_" + dChNum + "_snr=" + dChSNR[0],
-        print "d_" + dChNum + "_corr=" + dChCorr,
-        print "d_" + dChNum + "_uncorr=" + dChUncorr,
-
+	if not influx:
+        	print "d_" + dChNum + "_pow=" + dChPow[0],
+        	print "d_" + dChNum + "_snr=" + dChSNR[0],
+        	print "d_" + dChNum + "_corr=" + dChCorr,
+        	print "d_" + dChNum + "_uncorr=" + dChUncorr,
+	else:
+		print "downlink_channel,interface=" + str(i) + " value="+dChNum
+		print "downlink_power,interface=" + str(i) + " value="+dChPow[0]
+                print "downlink_snr,interface=" + str(i) + " value="+ dChSNR[0]
+                print "downlink_corrected,interface=" + str(i) + " value="+ dChCorr
+		print "downlink_uncorrected,interface=" + str(i) + " value="+dChUncorr
 for i in range(len(upChannel)):
-        uChData = upChannel[i].find_all('td')
+	uChData = upChannel[i].find_all('td')
         uChNum = uChData[1].string
         uChPow = uChData[6].string.split()
-        print "u_" + uChNum + "_pow=" + uChPow[0],
-
+        if not influx:
+        	print "u_" + uChNum + "_pow=" + uChPow[0],
+	else:
+		print "uplink_channel,interface="+ str(i) + " value=" + uChNum
+                print "uplink_power,interface="+ str(i) + " value=" + uChPow[0]
 # Exit Statuses
 
 if status == "OK:":
